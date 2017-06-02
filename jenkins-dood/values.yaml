@@ -62,11 +62,12 @@ Master:
 
 Agent:
   Enabled: true
-  Image: jenkinsci/jnlp-slave
-  ImageTag: 2.62
+  Image: gempesaw/jenkins-agent-docker
+  ImageTag: 1.0.0
   Privileged: false
   Cpu: "200m"
   Memory: "256Mi"
+  DockerApiVersion: 1.23
 
 Persistence:
   Enabled: true

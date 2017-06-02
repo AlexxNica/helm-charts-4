@@ -37,7 +37,16 @@ data:
               <idleMinutes>0</idleMinutes>
               <label></label>
               <nodeSelector></nodeSelector>
-              <volumes/>
+              <volumes>
+                <org.csanchez.jenkins.plugins.kubernetes.volumes.HostPathVolume>
+                  <mountPath>/var/run/docker.sock</mountPath>
+                  <hostPath>/var/run/docker.sock</hostPath>
+                </org.csanchez.jenkins.plugins.kubernetes.volumes.HostPathVolume>
+                <org.csanchez.jenkins.plugins.kubernetes.volumes.HostPathVolume>
+                  <mountPath>/home/jenkins/workspace</mountPath>
+                  <hostPath>/home/jenkins/workspace</hostPath>
+                </org.csanchez.jenkins.plugins.kubernetes.volumes.HostPathVolume>
+              </volumes>
               <containers>
                 <org.csanchez.jenkins.plugins.kubernetes.ContainerTemplate>
                   <name>jnlp</name>
@@ -59,7 +68,12 @@ data:
                   <envVars/>
                 </org.csanchez.jenkins.plugins.kubernetes.ContainerTemplate>
               </containers>
-              <envVars/>
+              <envVars>
+                <org.csanchez.jenkins.plugins.kubernetes.PodEnvVar>
+                  <key>DOCKER_API_VERSION</key>
+                  <value>{{ .Values.Agent.DockerApiVersion }}</value>
+                </org.csanchez.jenkins.plugins.kubernetes.PodEnvVar>
+              </envVars>
               <annotations/>
               <imagePullSecrets/>
               <nodeProperties/>
