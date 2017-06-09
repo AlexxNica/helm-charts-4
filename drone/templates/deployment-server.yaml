@@ -27,6 +27,16 @@ spec:
               secretKeyRef:
                 name: {{ template "fullname" . }}
                 key: secret
+          - name: DRONE_GITHUB_CLIENT
+            valueFrom:
+              secretKeyRef:
+                name: github
+                key: client
+          - name: DRONE_GITHUB_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: github
+                key: secret
           {{ range $key, $value := .Values.server.env }}
           - name: {{ $key }}
             value: {{ $value | quote }}

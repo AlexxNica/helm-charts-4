@@ -1,6 +1,14 @@
 # Drone.io
 
-[Drone](http://readme.drone.io/) is a Continuous Integration platform built on container technology. Every build is executed inside an ephemeral Docker container, giving developers complete control over their build environment with guaranteed isolation.
+[Drone](http://readme.drone.io/) is a Continuous Integration platform
+built on container technology. Every build is executed inside an
+ephemeral Docker container, giving developers complete control over
+their build environment with guaranteed isolation.
+
+These files were initially found
+[here](https://github.com/bacongobbler/kube-charts/tree/440e9d64298741253a06058c68dc871fd65aa32a)
+as part of a
+[PR to the main helm charts repo](https://github.com/kubernetes/charts/pull/821).
 
 ## Introduction
 
@@ -16,16 +24,11 @@ This chart stands up a Drone server. This includes:
 
 ## Installing the Chart
 
-To install the chart, run:
+Add the github client and secret as a Kubernetes secret:
 
 ```bash
-$ helm repo add incubator http://storage.googleapis.com/kubernetes-charts-incubator
-$ helm fetch incubator/drone --untar
-$ $EDITOR drone/values.yaml
+$ kubectl create secret generic github --from-literal=client=<client> --from-literal=secret=<secret>
 ```
-
-You will need to specify custom git parameters in order for the drone server to work.
-Please refer to [values.yaml](values.yaml) for the full run-down on how to configure this.
 
 Once it's configured, you can then install drone.
 
@@ -35,13 +38,14 @@ $ helm install ./drone
 
 ## Configuration
 
-Please refer to [values.yaml](values.yaml) for the full run-down on defaults. These are a mixture
-of Kubernetes and drone directives.
+Please refer to [values.yaml](values.yaml) for the full run-down on
+defaults. These are a mixture of Kubernetes and drone directives.
 
-Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`.
+Specify each parameter using the `--set key=value[,key=value]`
+argument to `helm install`.
 
-Alternatively, a YAML file that specifies the values for the parameters can be provided while
-installing the chart. For example,
+Alternatively, a YAML file that specifies the values for the
+parameters can be provided while installing the chart. For example,
 
 ```bash
 $ helm inspect values incubator/drone > values.yaml

@@ -2,7 +2,7 @@ image:
   registry: docker.io
   org: drone
   name: drone
-  tag: 0.7
+  tag: latest
   pullPolicy: IfNotPresent
 
 service:
@@ -21,18 +21,18 @@ server:
   # Drone server configuration. Values in here get injected as environment variables.
   # See http://readme.drone.io/admin/installation-reference#server-options for a list of possible values.
   env:
-    DRONE_DEBUG: "false"
+    DRONE_DEBUG: false
     DRONE_DATABASE_DRIVER: "sqlite"
     DRONE_DATABASE_DATASOURCE: "drone.sqlite"
     # Drone requires some environment variables to bootstrap the git service or it won't start up.
     # Uncomment this and add your own custom configuration.
     #
     # See http://readme.drone.io/admin/installation-reference/ for more info on these envvars.
-    #DRONE_OPEN: "true"
-    #DRONE_GITHUB: "true"
-    #DRONE_ORGS: "my-github-org,my-other-github-org"
-    #DRONE_GITHUB_CLIENT: "github-oauth2-client-id"
-    #DRONE_GITHUB_SECRET: "github-oauth2-client-secret"
+    DRONE_OPEN: false
+    DRONE_GITHUB: true
+    DRONE_ORGS: "Sharecare"
+    DRONE_ADMIN: "gempesaw"
+    DRONE_GITHUB_PRIVATE_MODE: true
   resources:
     requests:
       memory: 32Mi
@@ -45,7 +45,7 @@ agent:
   # Drone agent configuration. Values in here get injected as environment variables.
   # See http://readme.drone.io/admin/installation-reference#server-options for a list of possible values.
   env:
-    DRONE_DEBUG: "false"
+    DRONE_DEBUG: false
   resources:
     requests:
       memory: 32Mi
