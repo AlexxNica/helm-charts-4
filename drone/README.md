@@ -34,7 +34,8 @@ $ kubectl create secret generic github \
     --from-literal=client=<client> \
     --from-literal=secret=<secret> \
     --from-literal=orgs=<comma,separated,orgs> \
-    --from-literal=admins=<comma,separated,admins>
+    --from-literal=admins=<comma,separated,admins> \
+    --from-literal=driver=<postgres://user:pass@conn.str>
 ```
 
 Note that these secret keys must match the values.yaml secretEnvKeys

@@ -22,8 +22,10 @@ server:
   # See http://readme.drone.io/admin/installation-reference#server-options for a list of possible values.
   env:
     DRONE_DEBUG: false
-    DRONE_DATABASE_DRIVER: "sqlite3"
-    DRONE_DATABASE_DATASOURCE: "drone.sqlite"
+    DRONE_DATABASE_DRIVER: "postgres"
+    # datasource is a secret for postgres connection
+    # DRONE_DATABASE_DATASOURCE: "drone.sqlite"
+
     # Drone requires some environment variables to bootstrap the git service or it won't start up.
     # Uncomment this and add your own custom configuration.
     #
@@ -36,6 +38,7 @@ server:
     DRONE_ADMIN: "admins"
     DRONE_GITHUB_CLIENT: "client"
     DRONE_GITHUB_SECRET: "secret"
+    DRONE_DATABASE_DATASOURCE: "driver"
   resources:
     requests:
       memory: 32Mi
