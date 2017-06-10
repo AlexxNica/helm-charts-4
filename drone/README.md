@@ -24,11 +24,19 @@ This chart stands up a Drone server. This includes:
 
 ## Installing the Chart
 
-Add the github client and secret as a Kubernetes secret:
+Add the github information (OAuth app client and secret, approved orgs
+and admins) as a Kubernetes secret:
 
 ```bash
-$ kubectl create secret generic github --from-literal=client=<client> --from-literal=secret=<secret>
+$ kubectl create secret generic github \
+    --from-literal=client=<client> \
+    --from-literal=secret=<secret> \
+    --from-literal=orgs=<comma,separated,orgs> \
+    --from-literal=admins=<comma,separated,admins>
 ```
+
+Note that these secret keys must match the values.yaml secretEnvKeys
+section.
 
 Once it's configured, you can then install drone.
 
