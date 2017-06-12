@@ -12,10 +12,8 @@ service:
   type: ClusterIP
 
 ingress:
-  enabled: false
-  # enable TLS via kube-lego
-  tls: false
-  hostname: drone.example.com
+  enabled: true
+  # hostname: drone.be.jamconsultg.com
 
 server:
   # Drone server configuration. Values in here get injected as environment variables.
