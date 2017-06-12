@@ -1,0 +1,63 @@
+image:
+  registry: docker.io
+  org: drone
+  name: drone
+  tag: 0.7.1
+  pullPolicy: IfNotPresent
+
+service:
+  http:
+    externalPort: 80
+    internalPort: 8000
+  type: ClusterIP
+
+ingress:
+  enabled: true
+  # hostname: drone.be.jamconsultg.com
+
+server:
+  # Drone server configuration. Values in here get injected as environment variables.
+  # See http://readme.drone.io/admin/installation-reference#server-options for a list of possible values.
+  env:
+    DRONE_DEBUG: false
+    DRONE_DATABASE_DRIVER: "postgres"
+    # datasource is a secret for postgres connection
+    # DRONE_DATABASE_DATASOURCE: "drone.sqlite"
+
+    # Drone requires some environment variables to bootstrap the git service or it won't start up.
+    # Uncomment this and add your own custom configuration.
+    #
+    # See http://readme.drone.io/admin/installation-reference/ for more info on these envvars.
+    DRONE_OPEN: false
+    DRONE_GITHUB: true
+    DRONE_GITHUB_PRIVATE_MODE: true
+  secretEnvKeys:
+    DRONE_ORGS: "github_orgs"
+    DRONE_ADMIN: "github_admins"
+    DRONE_GITHUB_CLIENT: "github_client"
+    DRONE_GITHUB_SECRET: "github_secret"
+    DRONE_DATABASE_DATASOURCE: "db_driver"
+  resources:
+    requests:
+      memory: 32Mi
+      cpu: 40m
+    limits:
+      memory: 2Gi
+      cpu: 1
+
+agent:
+  # Drone agent configuration. Values in here get injected as environment variables.
+  # See http://readme.drone.io/admin/installation-reference#server-options for a list of possible values.
+  env:
+    DRONE_DEBUG: false
+  resources:
+    requests:
+      memory: 32Mi
+      cpu: 40m
+    limits:
+      memory: 2Gi
+      cpu: 1
+
+# Uncomment this if you want to set a specific shared secret between
+# the agents and servers, otherwise this will be auto-generated.
+#shared_secret: supersecret
