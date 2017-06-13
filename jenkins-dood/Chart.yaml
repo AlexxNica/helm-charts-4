@@ -8,8 +8,8 @@ maintainers:
   name: lachie83
 - email: viglesias@google.com
   name: viglesiasce
-name: jenkins
+name: jenkins-dood
 sources:
 - https://github.com/jenkinsci/jenkins
 - https://github.com/jenkinsci/docker-jnlp-slave
-version: 0.7.0
+version: 0.7.1
