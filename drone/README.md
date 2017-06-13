@@ -49,6 +49,12 @@ for real, you need to set the `ingress.hostname`:
 $ helm install ./drone --set ingress.hostname=your.dns.address
 ```
 
+Or to upgrade an existing installation,
+
+```bash
+$ helm upgrade --set ingress.hostname=<dns> <existing-name> ./drone
+```
+
 [fork]: https://github.com/bacongobbler/kube-charts/tree/440e9d64298741253a06058c68dc871fd65aa32a
 [pr]: https://github.com/kubernetes/charts/pull/821
 [installation]: http://readme.drone.io/admin/installation-guide/
