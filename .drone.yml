@@ -3,4 +3,4 @@ pipeline:
     image: soxhub/helm:v2.4.2-b
     commands:
       - cd drone && helm lint
-      - cd jenkins-dood && helm lint
+      - cd ../jenkins-dood && helm lint
