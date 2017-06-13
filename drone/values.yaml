@@ -28,7 +28,7 @@ server:
     # Uncomment this and add your own custom configuration.
     #
     # See http://readme.drone.io/admin/installation-reference/ for more info on these envvars.
-    DRONE_OPEN: false
+    DRONE_OPEN: true
     DRONE_GITHUB: true
     DRONE_GITHUB_PRIVATE_MODE: true
   secretEnvKeys:
