@@ -27,6 +27,10 @@ spec:
               secretKeyRef:
                 name: {{ template "fullname" . }}
                 key: secret
+          {{- if .Values.ingress.hostname }}
+          - name: DRONE_SERVER_HOST
+            value: https://{{ .Values.ingress.hostname }}
+          {{- end }}
           {{ range $key, $value := .Values.server.secretEnvKeys }}
           - name: {{ $key }}
             valueFrom:

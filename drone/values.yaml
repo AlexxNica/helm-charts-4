@@ -21,13 +21,9 @@ server:
   env:
     DRONE_DEBUG: false
     DRONE_DATABASE_DRIVER: "postgres"
-    # datasource is a secret for postgres connection
+    # datasource is a kubernetes secret for postgres connection
     # DRONE_DATABASE_DATASOURCE: "drone.sqlite"
 
-    # Drone requires some environment variables to bootstrap the git service or it won't start up.
-    # Uncomment this and add your own custom configuration.
-    #
-    # See http://readme.drone.io/admin/installation-reference/ for more info on these envvars.
     DRONE_OPEN: true
     DRONE_GITHUB: true
     DRONE_GITHUB_PRIVATE_MODE: true
@@ -46,10 +42,14 @@ server:
       cpu: 1
 
 agent:
-  # Drone agent configuration. Values in here get injected as environment variables.
-  # See http://readme.drone.io/admin/installation-reference#server-options for a list of possible values.
+  # Drone agent configuration. Values in here get injected as
+  # environment variables. For a list of possible values, see
+  # http://readme.drone.io/admin/installation-reference#server-options
   env:
     DRONE_DEBUG: false
+    # the docker version in our cluster doesn't match what's in
+    # 0.7.1. so let's pretend it does match.
+    DOCKER_API_VERSION: "1.24"
   resources:
     requests:
       memory: 32Mi
@@ -60,4 +60,4 @@ agent:
 
 # Uncomment this if you want to set a specific shared secret between
 # the agents and servers, otherwise this will be auto-generated.
-#shared_secret: supersecret
+# shared_secret: supersecret
