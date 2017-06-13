@@ -42,10 +42,11 @@ above, you don't have to worry about it.
 Drone uses sqlite3 by default but we're using postgresql; drone has
 additional [documentation for its backends][docs] available as well.
 
-Once it's configured, you can then install drone.
+Once it's configured, you can then install drone. If you're doing it
+for real, you need to set the `ingress.hostname`:
 
 ```bash
-$ helm install ./drone
+$ helm install ./drone --set ingress.hostname=your.dns.address
 ```
 
 [fork]: https://github.com/bacongobbler/kube-charts/tree/440e9d64298741253a06058c68dc871fd65aa32a
