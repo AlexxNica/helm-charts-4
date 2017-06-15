@@ -13,7 +13,9 @@ service:
 
 ingress:
   enabled: true
-  # hostname: drone.be.jamconsultg.com
+  hostname: drone.devpoc1.jamconsultg.com
+  labels:
+     env: prod
 
 server:
   # Drone server configuration. Values in here get injected as environment variables.
