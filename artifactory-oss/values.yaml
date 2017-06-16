@@ -38,7 +38,7 @@ art_image:
   version: 5.3.2
 art_service:
   name: artifactory
-  type: LoadBalancer
+  type: ClusterIP
   internalPortHttp: 8081
   externalPortHttp: 80
 art_persistence:
@@ -46,3 +46,9 @@ art_persistence:
   enabled: true
   accessMode: ReadWriteOnce
   size: 20Gi
+
+ingress:
+  enabled: true
+  hostname: artifactory.devpoc1.jamconsultg.com
+  labels:
+    env: prod
