@@ -1,3 +1,4 @@
+{{- if .Values.db_env.enabled }}
 {{- if .Values.db_persistence.enabled }}
 kind: PersistentVolumeClaim
 apiVersion: v1
@@ -20,4 +21,5 @@ spec:
   resources:
     requests:
       storage: {{ .Values.db_persistence.size | quote }}
+{{- end }}
 {{- end }}

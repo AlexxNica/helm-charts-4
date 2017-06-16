@@ -27,6 +27,7 @@ spec:
         image: "{{ .Values.art_image.repository }}:{{ .Values.art_image.version }}"
         imagePullPolicy: {{ .Values.imagePullPolicy }}
         env:
+        {{- if .Values.db_env.enabled }}
         - name: DB_TYPE
           value: {{ .Values.db_env.db_type }}
         - name: DB_USER
@@ -35,6 +36,7 @@ spec:
           value: {{ .Values.db_env.db_pass }}
         - name: DB_HOST
           value: {{ .Values.db_service.name }}
+        {{- end }}
         ports:
         - containerPort: {{ .Values.art_service.internalPortHttp }}
         volumeMounts:

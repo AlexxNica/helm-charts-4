@@ -1,3 +1,4 @@
+{{- if .Values.db_env.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -13,3 +14,4 @@ spec:
     name: {{ .Values.db_service.name }}
   selector:
     app: {{ .Values.db_name }}
+{{- end }}

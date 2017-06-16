@@ -9,6 +9,7 @@ replicaCount: 1
 imagePullPolicy: IfNotPresent
 initContainerImage: "busybox:1.26.2"
 db_env:
+  enabled: false
   db_type: postgresql
   db_name: artifactory
   db_user: artifactory
