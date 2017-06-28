@@ -1,0 +1,28 @@
+service:
+  http:
+    externalPort: 80
+  type: ClusterIP
+
+ingress:
+  enabled: true
+  hostname: repo.devpoc1.jamconsultg.com
+  labels:
+     env: prod
+
+deployment:
+  imageTag: 3.0.2
+  pullPolicy: IfNotPresent
+
+  # the port the service will be published inside the container
+  # this is not the port facing the public
+  containerPort: 8081
+  maxMem: 1200M
+  minMem: 1200M
+  #javaOpts:
+
+  persistence:
+    path: /data/nexus
+
+# Uncomment this if you want to set a specific shared secret between
+# the agents and servers, otherwise this will be auto-generated.
+# shared_secret: supersecret
