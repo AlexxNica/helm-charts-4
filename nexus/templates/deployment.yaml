@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
       - name: {{ template "fullname" . }}
-        image: "sonatype/nexus3:{{ .Values.deployment.imageTag }}"
+        image: "sonatype/nexus:{{ .Values.deployment.imageTag }}"
         imagePullPolicy: {{ default "" .Values.deployment.pullPolicy | quote }}
         env:
         - name: JAVA_MAX_MEM
