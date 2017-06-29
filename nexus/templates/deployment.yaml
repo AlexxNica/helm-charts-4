@@ -7,7 +7,6 @@ metadata:
     heritage: {{.Release.Service | quote }}
     release: {{.Release.Name | quote }}
     chart: "{{.Chart.Name}}-{{.Chart.Version}}"
-    provider: "devopskube"
 spec:
   replicas: 1
   template:
@@ -17,7 +16,6 @@ spec:
         heritage: {{.Release.Service | quote }}
         release: {{.Release.Name | quote }}
         chart: "{{.Chart.Name}}-{{.Chart.Version}}"
-        provider: "devopskube"
     spec:
       containers:
       - name: {{ template "fullname" . }}
@@ -35,13 +33,13 @@ spec:
           containerPort: {{ .Values.deployment.containerPort }}
         livenessProbe:
           httpGet:
-            path: /
+            path: /nexus/
             port: http
           initialDelaySeconds: 120
           timeoutSeconds: 5
         readinessProbe:
           httpGet:
-            path: /
+            path: /nexus/
             port: http
           initialDelaySeconds: 5
           timeoutSeconds: 1

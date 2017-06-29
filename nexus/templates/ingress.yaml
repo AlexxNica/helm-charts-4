@@ -7,14 +7,10 @@ metadata:
     heritage: {{.Release.Service | quote }}
     release: {{.Release.Name | quote }}
     chart: "{{.Chart.Name}}-{{.Chart.Version}}"
-    provider: "devopskube"
+    env: {{ .Values.ingress.labels.env }}
   annotations:
     kubernetes.io/tls-acme: "true"
 spec:
-  tls:
-  - secretName: {{ .Chart.Name }}-tls
-    hosts:
-    - {{ .Values.ingress.hostname }}
   rules:
   - host: {{ .Values.ingress.hostname }}
     http:
