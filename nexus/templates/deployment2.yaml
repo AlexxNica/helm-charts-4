@@ -1,0 +1,48 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: nexus
+  labels:
+    app: "nexus"
+    chart: "nexus-0.0.1"
+    provider: "devopskube"
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: "nexus"
+        chart: "nexus-0.0.1"
+        provider: "devopskube"
+    spec:
+      containers:
+      - name: nexus
+        image: "sonatype/nexus3:3.3.2"
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: JAVA_MAX_MEM
+          value: 1200M
+        - name: JAVA_MIN_MEM
+          value: 1200M
+        ports:
+        - name: http
+          containerPort: 8081
+        livenessProbe:
+          httpGet:
+            path: /nexus/
+            port: http
+          initialDelaySeconds: 120
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /nexus/
+            port: http
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
+        volumeMounts:
+        - name: nexus-data
+          mountPath: /nexus-data
+      volumes:
+      - name: nexus-data
+        hostPath:
+          path: /data/nexus

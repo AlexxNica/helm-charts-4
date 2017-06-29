@@ -10,7 +10,7 @@ ingress:
      env: prod
 
 deployment:
-  imageTag: oss
+  imageTag: 3.3.2
   pullPolicy: IfNotPresent
 
   # the port the service will be published inside the container
