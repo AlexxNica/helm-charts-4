@@ -19,9 +19,6 @@ deployment:
   javaOpts: "-Xms1200m -Xmx1200m"
   context: /
 
-  persistence:
-    path: /data/nexus
-
 # Uncomment this if you want to set a specific shared secret between
 # the agents and servers, otherwise this will be auto-generated.
 # shared_secret: supersecret
