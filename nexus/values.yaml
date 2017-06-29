@@ -16,9 +16,8 @@ deployment:
   # the port the service will be published inside the container
   # this is not the port facing the public
   containerPort: 8081
-  maxMem: 1200M
-  minMem: 1200M
-  #javaOpts:
+  javaOpts: "-Xms1200m -Xmx1200m"
+  context: /
 
   persistence:
     path: /data/nexus

@@ -24,9 +24,8 @@ The following tables lists the configurable parameters of the Nexus chart and th
 |---------|-----------|-------|
 |`ingress.hostname`|Host Name of this Instance|`repo.devpoc1.jamconsultg.com`|
 |`deployment.containerPort`|Port of the container|`8081`|
-|`deployment.maxMem`|Resource limit memory (-Xmx)|`1200M`|
-|`deployment.minMem`|Minimum Memory (-Xms)|`1200M`|
 |`deployment.javaOpts`|Additional options for the JVM|''|
+|`deployment.context`|Root context for container, as well as liveliness/readiness probes|'/'|
 |`deployment.persistence.path`|Path where all data on the host is stored|`/data/nexus`|
 
 Specify each parameter using the `--set key=value[,key=value]` argument to helm install.

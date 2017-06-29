@@ -20,22 +20,22 @@ spec:
         image: "sonatype/nexus3:3.3.2"
         imagePullPolicy: IfNotPresent
         env:
-        - name: JAVA_MAX_MEM
-          value: 1200M
-        - name: JAVA_MIN_MEM
-          value: 1200M
+        - name: INSTALL4J_ADD_VM_PARAMS
+          value: "-Xms1200m -Xmx1200m"
+        - name: NEXUS_CONTEXT
+          value: /
         ports:
         - name: http
           containerPort: 8081
         livenessProbe:
           httpGet:
-            path: /nexus/
+            path: /
             port: http
           initialDelaySeconds: 120
           timeoutSeconds: 5
         readinessProbe:
           httpGet:
-            path: /nexus/
+            path: /
             port: http
           initialDelaySeconds: 5
           timeoutSeconds: 1
