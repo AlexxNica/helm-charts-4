@@ -1,12 +1,12 @@
-apiVersion: apps/v1beta1
-kind: StatefulSet
+apiVersion: extensions/v1beta1
+kind: Deployment
 metadata:
   name: nexus
   labels:
     app: "nexus"
     chart: "nexus-0.0.1"
+    provider: "devopskube"
 spec:
-  serviceName: "nexus"
   replicas: 1
   template:
     metadata:
@@ -42,11 +42,7 @@ spec:
         volumeMounts:
         - name: nexus-data
           mountPath: /nexus-data
-  volumeClaimTemplates:
-  - metadata:
-      name: nexus-data
-    spec:
-      accessModes: [ "ReadWriteOnce" ]
-      resources:
-        requests:
-          storage: 10Gi
+      volumes:
+      - name: nexus-data
+        hostPath:
+          path: /data/nexus
