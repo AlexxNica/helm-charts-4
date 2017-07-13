@@ -2,5 +2,8 @@ pipeline:
   build:
     image: soxhub/helm:v2.4.2-b
     commands:
-      - cd drone && helm lint
-      - cd ../jenkins-dood && helm lint
+      - helm lint ./drone
+      - helm lint ./artifactory-oss
+      - helm lint ./artifactory-pro
+      - helm lint ./jenkins-dood
+      # - helm lint ./nexus
