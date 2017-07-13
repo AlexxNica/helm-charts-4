@@ -1,5 +1,5 @@
 pipeline:
-  build:
+  lint:
     image: soxhub/helm:v2.4.2-b
     commands:
       - helm lint ./drone
