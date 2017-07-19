@@ -45,6 +45,8 @@ spec:
         ports:
         - name: http
           containerPort: {{ .Values.service.http.internalPort }}
+        - name: grpc
+          containerPort: 9000
         readinessProbe:
           httpGet:
             path: /
