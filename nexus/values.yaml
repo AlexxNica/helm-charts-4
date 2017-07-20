@@ -9,7 +9,7 @@ ingress:
   labels:
      env: prod
 
-deployment:
+statefulset:
   imageTag: 3.3.2
   pullPolicy: IfNotPresent
 
@@ -20,6 +20,7 @@ deployment:
   context: /
   persistence:
     path: /data/nexus
+    storage: 10Gi
 
 # Uncomment this if you want to set a specific shared secret between
 # the agents and servers, otherwise this will be auto-generated.
