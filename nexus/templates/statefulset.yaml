@@ -18,6 +18,13 @@ spec:
         release: {{.Release.Name | quote }}
         chart: "{{.Chart.Name}}-{{.Chart.Version}}"
     spec:
+      initContainers:
+      - name: init-fs-prep
+        image: busybox
+        command: ['sh', '-c', 'chmod 777 /nexus-data']
+        volumeMounts:
+        - name: nexus-data
+          mountPath: /nexus-data
       containers:
       - name: {{ template "fullname" . }}
         image: "sonatype/nexus3:{{ .Values.statefulset.imageTag }}"
@@ -37,10 +44,6 @@ spec:
         volumeMounts:
         - name: nexus-data
           mountPath: /nexus-data
-      volumes:
-      - name: nexus-data
-        hostPath:
-          path: {{ .Values.statefulset.persistence.path }}
   volumeClaimTemplates:
   - metadata:
       name: nexus-data

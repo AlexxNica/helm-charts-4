@@ -22,7 +22,7 @@ statefulset:
   javaOpts: "-Xms1200m -Xmx1200m"
   context: /
   persistence:
-    path: /data/nexus
+    path: /nexus-data
     storage: 10Gi
 
 # Uncomment this if you want to set a specific shared secret between
