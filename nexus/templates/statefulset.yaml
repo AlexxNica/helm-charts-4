@@ -30,6 +30,10 @@ spec:
         ports:
         - name: http
           containerPort: {{ .Values.statefulset.containerPort }}
+        - name: dockerPrivate
+          containerPort: {{ .Values.service.docker.privatePort }}
+        - name: dockerGroup
+          containerPort: {{ .Values.service.docker.groupPort }}
         volumeMounts:
         - name: nexus-data
           mountPath: /nexus-data

@@ -1,6 +1,9 @@
 service:
   http:
     externalPort: 80
+  docker:
+    groupPort: 18443
+    privatePort: 18444
   type: ClusterIP
 
 ingress:
