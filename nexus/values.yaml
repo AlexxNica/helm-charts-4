@@ -29,6 +29,14 @@ statefulset:
 
 proxy:
   imageTag: 24b602
+  resources:
+    limits:
+      cpu: 100m
+      memory: 128Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
 
 # Uncomment this if you want to set a specific shared secret between
 # the agents and servers, otherwise this will be auto-generated.

@@ -31,3 +31,5 @@ spec:
         ports:
         - name: http
           containerPort: {{ .Values.service.proxy.containerPort }}
+        resources:
+{{ toYaml .Values.resources | indent 10 }}
