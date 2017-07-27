@@ -28,7 +28,7 @@ spec:
       containers:
       - name: {{ template "fullname" . }}
         image: "sonatype/nexus3:{{ .Values.statefulset.imageTag }}"
-        imagePullPolicy: {{ default "" .Values.statefulset.pullPolicy | quote }}
+        imagePullPolicy: {{ default "" .Values.statefulset.pullPolicy }}
         env:
         - name: INSTALL4J_ADD_VM_PARAMS
           value: "{{ .Values.statefulset.javaOpts }}"

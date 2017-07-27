@@ -8,8 +8,6 @@ metadata:
     release: {{.Release.Name | quote }}
     chart: "{{.Chart.Name}}-{{.Chart.Version}}"
     env: {{ .Values.ingress.labels.env }}
-  annotations:
-    kubernetes.io/tls-acme: "true"
 spec:
   rules:
   - host: {{ .Values.ingress.hostname }}
