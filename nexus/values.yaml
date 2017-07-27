@@ -28,7 +28,7 @@ statefulset:
     storage: 10Gi
 
 proxy:
-  imageTag: 24b602
+  imageTag: 74a3dc
   resources:
     limits:
       cpu: 100m

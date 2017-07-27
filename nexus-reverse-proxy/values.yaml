@@ -1,7 +1,7 @@
 replicaCount: 1
 image:
   repository: cloudsc/nexus-reverse-proxy
-  tag: 24b602
+  tag: 74a3dc
   pullPolicy: IfNotPresent
 service:
   http:
@@ -12,7 +12,7 @@ service:
   proxy:
     containerPort: 3000
   nexus:
-    host: PLEASE_CHANGE_ME
+    host: nexus
 ingress:
   hostname: repo-test.devpoc1.jamconsultg.com
   labels:
