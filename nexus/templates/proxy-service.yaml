@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "fullname" . }}-proxy
+  labels:
+    app: {{ template "fullname" . }}-proxy
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  type: ClusterIP
+  ports:
+  - name: http
+    port: {{ .Values.service.http.externalPort }}
+    targetPort: http
+    protocol: TCP
+  selector:
+    app: {{ template "fullname" . }}-proxy

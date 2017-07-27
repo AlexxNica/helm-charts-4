@@ -4,11 +4,13 @@ service:
   docker:
     groupPort: 18443
     privatePort: 18444
+  proxy:
+    containerPort: 3000
   type: ClusterIP
 
 ingress:
   enabled: true
-  hostname: repo.devpoc1.jamconsultg.com
+  hostname: repo-test.devpoc1.jamconsultg.com
   labels:
      env: prod
 
@@ -24,6 +26,9 @@ statefulset:
   persistence:
     path: /nexus-data
     storage: 10Gi
+
+proxy:
+  imageTag: 24b602
 
 # Uncomment this if you want to set a specific shared secret between
 # the agents and servers, otherwise this will be auto-generated.

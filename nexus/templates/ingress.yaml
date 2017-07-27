@@ -15,5 +15,5 @@ spec:
       paths:
       - path: /
         backend:
-          serviceName: {{ template "fullname" . }}
-          servicePort: 80
+          serviceName: {{ template "fullname" . }}-proxy
+          servicePort: http
