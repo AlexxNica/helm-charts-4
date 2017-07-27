@@ -1,0 +1,26 @@
+replicaCount: 1
+image:
+  repository: cloudsc/nexus-reverse-proxy
+  tag: 24b602
+  pullPolicy: IfNotPresent
+service:
+  http:
+    externalPort: 80
+  docker:
+    groupPort: 18443
+    privatePort: 18444
+  proxy:
+    containerPort: 3000
+  nexus:
+    host: PLEASE_CHANGE_ME
+ingress:
+  hostname: repo-test.devpoc1.jamconsultg.com
+  labels:
+    env: prod
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi

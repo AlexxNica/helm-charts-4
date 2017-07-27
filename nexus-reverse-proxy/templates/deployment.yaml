@@ -1,0 +1,33 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}
+  labels:
+    app: {{ template "fullname" . }}
+    heritage: {{.Release.Service | quote }}
+    release: {{.Release.Name | quote }}
+    chart: "{{.Chart.Name}}-{{.Chart.Version}}"
+spec:
+  replicas: {{ .Values.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "fullname". }}
+        heritage: {{.Release.Service | quote }}
+        release: {{.Release.Name | quote }}
+        chart: "{{.Chart.Name}}-{{.Chart.Version}}"
+    spec:
+      containers:
+      - name: {{ template "fullname" . }}
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        imagePullPolicy: {{ default "" .Values.image.pullPolicy }}
+        env:
+        - name: NEXUS_TARGET
+          value: http://{{ .Values.service.nexus.host }}:{{ .Values.service.http.externalPort }}
+        - name: DOCKER_PRIVATE_TARGET
+          value: http://{{ .Values.service.nexus.host }}:{{ .Values.service.docker.privatePort }}
+        - name: DOCKER_GROUP_TARGET
+          value: http://{{ .Values.service.nexus.host }}:{{ .Values.service.docker.groupPort }}
+        ports:
+        - name: http
+          containerPort: {{ .Values.service.proxy.containerPort }}
