@@ -14,11 +14,11 @@ spec:
     port: {{ .Values.service.http.externalPort }}
     targetPort: http
     protocol: TCP
-  - name: docker
+  - name: docker-private
     port: {{ .Values.service.docker.privatePort }}
-    targetPort: dockerPrivate
-  - name: docker
+    targetPort: {{ .Values.service.docker.privatePort }}
+  - name: docker-group
     port: {{ .Values.service.docker.groupPort }}
-    targetPort: dockerGroup
+    targetPort: {{ .Values.service.docker.privatePort }}
   selector:
     app: {{ template "fullname" . }}

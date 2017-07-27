@@ -3,7 +3,7 @@ kind: StatefulSet
 metadata:
   name: {{ template "fullname" . }}
   labels:
-    app: "{{ .Chart.Name }}"
+    app: {{ template "fullname". }}
     heritage: {{.Release.Service | quote }}
     release: {{.Release.Name | quote }}
     chart: "{{.Chart.Name}}-{{.Chart.Version}}"
@@ -13,7 +13,7 @@ spec:
   template:
     metadata:
       labels:
-        app: "{{ .Chart.Name }}"
+        app: {{ template "fullname" . }}
         heritage: {{.Release.Service | quote }}
         release: {{.Release.Name | quote }}
         chart: "{{.Chart.Name}}-{{.Chart.Version}}"
@@ -37,9 +37,9 @@ spec:
         ports:
         - name: http
           containerPort: {{ .Values.statefulset.containerPort }}
-        - name: dockerPrivate
+        - name: docker-private
           containerPort: {{ .Values.service.docker.privatePort }}
-        - name: dockerGroup
+        - name: docker-group
           containerPort: {{ .Values.service.docker.groupPort }}
         volumeMounts:
         - name: nexus-data
