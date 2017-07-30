@@ -19,12 +19,12 @@ spec:
         chart: "{{.Chart.Name}}-{{.Chart.Version}}"
     spec:
       initContainers:
-      - name: init-fs-prep
+      - name: init-volume
         image: busybox
-        command: ['sh', '-c', 'chmod 777 /nexus-data']
+        command: ['sh', '-c', 'chown -R 200 {{ .Values.statefulset.persistence.path }}']
         volumeMounts:
         - name: nexus-data
-          mountPath: /nexus-data
+          mountPath: {{ .Values.statefulset.persistence.path }}
       {{- if .Values.restore.enabled }}
       - name: restore-backups
         image: {{ .Values.restore.image }}
@@ -51,7 +51,7 @@ spec:
           containerPort: {{ .Values.service.docker.groupPort }}
         volumeMounts:
         - name: nexus-data
-          mountPath: /nexus-data
+          mountPath: {{ .Values.statefulset.persistence.path }}
       {{- if .Values.restore.isImageSecret }}
 {{ toYaml .Values.restore.pullSecret | indent 6 }}
       {{- end }}
