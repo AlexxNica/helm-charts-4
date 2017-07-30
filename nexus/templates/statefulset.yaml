@@ -25,6 +25,16 @@ spec:
         volumeMounts:
         - name: nexus-data
           mountPath: /nexus-data
+      {{- if .Values.restore.enabled }}
+      - name: restore-backups
+        image: {{ .Values.restore.image }}
+        env:
+        - name: NEXUS_DATA
+          value: {{ .Values.statefulset.persistence.path }}
+        volumeMounts:
+        - name: nexus-data
+          mountPath: {{ .Values.statefulset.persistence.path }}
+      {{- end }}
       containers:
       - name: {{ template "fullname" . }}
         image: {{ .Values.statefulset.image }}
@@ -42,6 +52,9 @@ spec:
         volumeMounts:
         - name: nexus-data
           mountPath: /nexus-data
+      {{- if .Values.restore.isImageSecret }}
+{{ toYaml .Values.restore.pullSecret | indent 6 }}
+      {{- end }}
   volumeClaimTemplates:
   - metadata:
       name: nexus-data

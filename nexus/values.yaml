@@ -26,6 +26,14 @@ statefulset:
     path: /nexus-data
     storage: 10Gi
 
+restore:
+  enabled: true
+  image: cloudsc/nexus-restore:with-docker-registries
+  isImageSecret: false
+  pullSecret:
+    imagePullSecrets:
+      - name: example
+
 proxy:
   image: cloudsc/nexus-reverse-proxy:77767f
   resources:
