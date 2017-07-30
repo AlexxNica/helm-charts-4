@@ -15,7 +15,7 @@ ingress:
      env: prod
 
 statefulset:
-  imageTag: 3.3.2
+  image: sonatype/nexus3:3.4.0
   pullPolicy: IfNotPresent
 
   # the port the service will be published inside the container
@@ -28,7 +28,7 @@ statefulset:
     storage: 10Gi
 
 proxy:
-  imageTag: 74a3dc
+  image: cloudsc/nexus-reverse-proxy:77767f
   resources:
     limits:
       cpu: 100m
@@ -36,7 +36,6 @@ proxy:
     requests:
       cpu: 100m
       memory: 128Mi
-
 
 # Uncomment this if you want to set a specific shared secret between
 # the agents and servers, otherwise this will be auto-generated.

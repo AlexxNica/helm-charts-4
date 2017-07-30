@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: {{ template "fullname" . }}-proxy
-        image: "cloudsc/nexus-reverse-proxy:{{ .Values.proxy.imageTag }}"
+        image: {{ .Values.proxy.image }}
         imagePullPolicy: {{ default "" .Values.statefulset.pullPolicy }}
         env:
         - name: NEXUS_TARGET

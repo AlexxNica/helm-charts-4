@@ -27,7 +27,7 @@ spec:
           mountPath: /nexus-data
       containers:
       - name: {{ template "fullname" . }}
-        image: "sonatype/nexus3:{{ .Values.statefulset.imageTag }}"
+        image: {{ .Values.statefulset.image }}
         imagePullPolicy: {{ default "" .Values.statefulset.pullPolicy }}
         env:
         - name: INSTALL4J_ADD_VM_PARAMS
