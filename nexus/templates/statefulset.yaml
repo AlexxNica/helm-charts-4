@@ -32,8 +32,6 @@ spec:
         env:
         - name: INSTALL4J_ADD_VM_PARAMS
           value: "{{ .Values.statefulset.javaOpts }}"
-        - name: NEXUS_CONTEXT
-          value: {{ .Values.statefulset.context }}
         ports:
         - name: http
           containerPort: {{ .Values.statefulset.containerPort }}

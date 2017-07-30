@@ -22,7 +22,6 @@ statefulset:
   # this is not the port facing the public
   containerPort: 8081
   javaOpts: "-Xms1200m -Xmx1200m"
-  context: /
   persistence:
     path: /nexus-data
     storage: 10Gi
