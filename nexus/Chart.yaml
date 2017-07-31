@@ -1,10 +1,11 @@
 name: nexus
-version: 0.0.1
-description: Sonatype Nexus Repository Manager 3.
+version: 1.0.0
+description: Sonatype Nexus Repository Manager 3
 keywords:
   - Maven Repository
   - NPM Repository
   - Nuget Repository
+  - Docker Repository
 home: http://www.sonatype.org/nexus/category/nexus-3/
 sources:
   - https://github.com/sonatype/docker-nexus3

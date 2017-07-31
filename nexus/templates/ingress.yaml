@@ -3,13 +3,11 @@ kind: Ingress
 metadata:
   name: {{ template "fullname" . }}
   labels:
-    app: "{{ .Chart.Name }}"
+    app: {{ template "fullname" . }}
     heritage: {{.Release.Service | quote }}
     release: {{.Release.Name | quote }}
     chart: "{{.Chart.Name}}-{{.Chart.Version}}"
     env: {{ .Values.ingress.labels.env }}
-  annotations:
-    kubernetes.io/tls-acme: "true"
 spec:
   rules:
   - host: {{ .Values.ingress.hostname }}
@@ -17,5 +15,5 @@ spec:
       paths:
       - path: /
         backend:
-          serviceName: {{ template "fullname" . }}
-          servicePort: 80
+          serviceName: {{ template "fullname" . }}-proxy
+          servicePort: http

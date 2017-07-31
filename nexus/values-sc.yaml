@@ -10,7 +10,7 @@ service:
 
 ingress:
   enabled: true
-  hostname: repo-test.devpoc1.jamconsultg.com
+  hostname: repo.devpoc1.jamconsultg.com
   labels:
      env: prod
 
@@ -25,11 +25,11 @@ statefulset:
 
 restore:
   enabled: true
-  image: cloudsc/nexus-restore:with-docker-registries
-  isImageSecret: false
+  image: cloudsc/nexus-backup:1.0.1
+  isImageSecret: true
   pullSecret:
     imagePullSecrets:
-      - name: example
+      - name: cloudsc
 
 proxy:
   image: cloudsc/nexus-reverse-proxy:77767f
