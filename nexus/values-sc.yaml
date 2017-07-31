@@ -1,0 +1,46 @@
+service:
+  http:
+    externalPort: 80
+  docker:
+    groupPort: 18443
+    privatePort: 18444
+  proxy:
+    containerPort: 3000
+  type: ClusterIP
+
+ingress:
+  enabled: true
+  hostname: repo.devpoc1.jamconsultg.com
+  labels:
+     env: prod
+
+statefulset:
+  image: sonatype/nexus3:3.4.0
+  pullPolicy: IfNotPresent
+  containerPort: 8081
+  javaOpts: "-Xms1200m -Xmx1200m"
+  persistence:
+    path: /nexus-data
+    storage: 10Gi
+
+restore:
+  enabled: true
+  image: cloudsc/nexus-backup:1.0.1
+  isImageSecret: true
+  pullSecret:
+    imagePullSecrets:
+      - name: cloudsc
+
+proxy:
+  image: cloudsc/nexus-reverse-proxy:77767f
+  resources:
+    limits:
+      cpu: 100m
+      memory: 128Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+# Uncomment this if you want to set a specific shared secret between
+# the agents and servers, otherwise this will be auto-generated.
+# shared_secret: supersecret
