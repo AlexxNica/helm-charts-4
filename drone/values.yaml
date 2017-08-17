@@ -1,5 +1,4 @@
 image:
-  registry: docker.io
   org: drone
   name: drone@sha256
   tag: f067d908008634aee3f8848e87e8e6be78cd6db17c17ec6158d8da12d66fe484
