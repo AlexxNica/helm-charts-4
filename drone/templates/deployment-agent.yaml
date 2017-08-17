@@ -21,8 +21,6 @@ spec:
       - name: {{ template "fullname" . }}-agent
         image: "{{ .Values.image.org }}/{{ .Values.image.agentName }}:{{ .Values.image.agentTag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
-        args:
-          - "agent"
         env:
           - name: DRONE_SERVER
             value: {{ template "fullname" . }}:{{ .Values.service.grpc.externalPort }}

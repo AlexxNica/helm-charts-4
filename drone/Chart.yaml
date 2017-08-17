@@ -9,7 +9,7 @@ keywords:
 - drone.io
 - go
 sources:
-- http://readme.drone.io/
+- http://docs.drone.io/
 maintainers:
-- name: Matthew Fisher
-  email: mfisher@deis.com
+- name: Daniel Gempesaw
+  email: dgempesaw@sharecare.com
