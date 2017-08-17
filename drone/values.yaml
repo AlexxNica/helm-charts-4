@@ -53,9 +53,7 @@ agent:
   # http://readme.drone.io/admin/installation-reference#server-options
   env:
     DRONE_DEBUG: false
-    # the docker version in our cluster doesn't match what's in
-    # 0.7.1. so let's pretend it does match.
-    DOCKER_API_VERSION: "1.24"
+    DOCKER_HOST: "tcp://localhost:2375"
   resources:
     requests:
       memory: 32Mi

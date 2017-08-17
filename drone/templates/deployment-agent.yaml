@@ -18,6 +18,23 @@ spec:
         heritage: "{{ .Release.Service }}"
     spec:
       containers:
+      - name: {{ template "fullname" . }}-dind
+        image: docker:stable-dind
+        args:
+          - "--storage-driver=overlay"
+        ports:
+          - name: docker
+            containerPort: 2375
+            protocol: TCP
+        securityContext:
+          privileged: true
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+          limits:
+            cpu: 500m
+            memory: 500Mi
       - name: {{ template "fullname" . }}-agent
         image: "{{ .Values.image.org }}/{{ .Values.image.agentName }}:{{ .Values.image.agentTag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
@@ -35,11 +52,4 @@ spec:
           {{ end }}
         resources:
 {{ toYaml .Values.agent.resources | indent 10 }}
-        volumeMounts:
-          # Enables Docker in Docker
-          - mountPath: /var/run/docker.sock
-            name: docker-socket
       volumes:
-        - name: docker-socket
-          hostPath:
-            path: /var/run/docker.sock

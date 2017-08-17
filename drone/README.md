@@ -14,7 +14,7 @@ particular setup.
 This chart stands up a Drone server. This includes:
 
 - A [Drone Server][installation] Pod
-- A [Drone Agent][installation] Pod
+- A [Drone Agent][installation] Pod with a sidecar DinD container
 
 ## Prerequisites
 
