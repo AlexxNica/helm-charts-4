@@ -35,6 +35,9 @@ spec:
           limits:
             cpu: 500m
             memory: 500Mi
+        volumeMounts:
+          - mountPath: /secrets
+            name: drone-nexus
       - name: {{ template "fullname" . }}-agent
         image: "{{ .Values.image.org }}/{{ .Values.image.agentName }}:{{ .Values.image.agentTag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
@@ -53,3 +56,6 @@ spec:
         resources:
 {{ toYaml .Values.agent.resources | indent 10 }}
       volumes:
+      - name: drone-nexus
+        secret:
+          secretName: drone-nexus

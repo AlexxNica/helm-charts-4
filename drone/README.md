@@ -23,8 +23,8 @@ This chart stands up a Drone server. This includes:
 
 ## Installing the Chart
 
-The chart is currently set up to require the following information as
-a Kubernetes secret:
+The chart is currently set up to require the following two Kubernetes
+secrets
 
 ```bash
 $ kubectl create secret generic drone \
@@ -33,6 +33,11 @@ $ kubectl create secret generic drone \
     --from-literal=github_orgs=<comma,separated,orgs> \
     --from-literal=github_admins=<comma,separated,admins> \
     --from-literal=db_driver=<postgres://user:pass@conn.str>
+
+$ kubectl create secret generic drone-nexus \
+    --from-file=$HOME/.npmrc \
+    --from-file=$HOME/.sbt/0.13/plugins/credentials.sbt \
+    --from-file=$HOME/.m2/settings.xml
 ```
 
 Note that these secret keys must match the `values.yaml` secretEnvKeys
@@ -42,17 +47,16 @@ above, you don't have to worry about it.
 Drone uses sqlite3 by default but we're using postgresql; drone has
 additional [documentation for its backends][docs] available as well.
 
-Once it's configured, you can then install drone. If you're doing it
-for real, you need to set the `ingress.hostname`:
+Once it's configured, you can then install drone.
 
 ```bash
-$ helm install ./drone --set ingress.hostname=your.dns.address
+$ helm install ./drone
 ```
 
 Or to upgrade an existing installation,
 
 ```bash
-$ helm upgrade --set ingress.hostname=<dns> <existing-name> ./drone
+$ helm upgrade <existing-name> ./drone
 ```
 
 [fork]: https://github.com/bacongobbler/kube-charts/tree/440e9d64298741253a06058c68dc871fd65aa32a
