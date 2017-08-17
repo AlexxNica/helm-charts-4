@@ -6,12 +6,13 @@ image:
   agentTag: 0.8.0-rc.3
   pullPolicy: Always
 
+# it is a bad idea to change the internalPorts
 service:
   http:
     externalPort: 80
     internalPort: 8000
   grpc:
-    externalPort: 9000
+    internalPort: 9000
   type: ClusterIP
 
 ingress:

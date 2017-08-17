@@ -23,7 +23,7 @@ spec:
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         env:
           - name: DRONE_SERVER
-            value: {{ template "fullname" . }}:{{ .Values.service.grpc.externalPort }}
+            value: {{ template "fullname" . }}:{{ .Values.service.grpc.internalPort }}
           - name: DRONE_SECRET
             valueFrom:
               secretKeyRef:
