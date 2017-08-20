@@ -18,44 +18,22 @@ spec:
         heritage: "{{ .Release.Service }}"
     spec:
       containers:
-      - name: {{ template "fullname" . }}-dind
-        image: docker:stable-dind
-        args:
-          - "--storage-driver=overlay"
-        ports:
-          - name: docker
-            containerPort: 2375
-            protocol: TCP
-        securityContext:
-          privileged: true
-        resources:
-          requests:
-            cpu: 100m
-            memory: 100Mi
-          limits:
-            cpu: 500m
-            memory: 500Mi
-        volumeMounts:
-          - mountPath: /secrets
-            name: drone-nexus
       - name: {{ template "fullname" . }}-agent
         image: "{{ .Values.image.org }}/{{ .Values.image.agentName }}:{{ .Values.image.agentTag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         env:
-          - name: DRONE_SERVER
-            value: {{ template "fullname" . }}:{{ .Values.service.grpc.internalPort }}
-          - name: DRONE_SECRET
-            valueFrom:
-              secretKeyRef:
-                name: {{ template "fullname" . }}
-                key: secret
-          {{ range $key, $value := .Values.agent.env }}
-          - name: {{ $key }}
-            value: {{ $value | quote }}
-          {{ end }}
+        - name: DRONE_SERVER
+          value: {{ template "fullname" . }}:{{ .Values.service.grpc.internalPort }}
+        - name: DRONE_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "fullname" . }}
+              key: secret
+        - name: DOCKER_HOST
+          value: tcp://{{ template "fullname" . }}-dind:{{ .Values.service.docker.internalPort }}
+        {{ range $key, $value := .Values.agent.env }}
+        - name: {{ $key }}
+          value: {{ $value | quote }}
+        {{ end }}
         resources:
 {{ toYaml .Values.agent.resources | indent 10 }}
-      volumes:
-      - name: drone-nexus
-        secret:
-          secretName: drone-nexus

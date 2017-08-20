@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "fullname" . }}-dind
+  labels:
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  type: ClusterIP
+  ports:
+  - name: docker
+    port: {{ .Values.service.docker.internalPort }}
+    targetPort: docker
+  selector:
+    app: {{ template "fullname" . }}-dind

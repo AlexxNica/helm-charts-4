@@ -1,0 +1,44 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}-dind
+  labels:
+    app: {{ template "fullname" . }}-dind
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: {{ template "fullname" . }}-dind
+        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+        release: "{{ .Release.Name }}"
+        heritage: "{{ .Release.Service }}"
+    spec:
+      containers:
+      - name: {{ template "fullname" . }}-dind
+        image: docker:stable-dind
+        args:
+        - "--storage-driver=overlay"
+        ports:
+        - name: docker
+          containerPort: {{ .Values.service.docker.internalPort }}
+          protocol: TCP
+        securityContext:
+          privileged: true
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+          limits:
+            cpu: "1"
+            memory: 4Gi
+        volumeMounts:
+        - mountPath: /secrets
+          name: drone-nexus
+      volumes:
+      - name: drone-nexus
+        secret:
+          secretName: drone-nexus

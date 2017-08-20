@@ -13,6 +13,8 @@ service:
     internalPort: 8000
   grpc:
     internalPort: 9000
+  docker:
+    internalPort: 2375
   type: ClusterIP
 
 ingress:
@@ -44,8 +46,8 @@ server:
       memory: 32Mi
       cpu: 40m
     limits:
-      memory: 2Gi
-      cpu: 1
+      memory: 1Gi
+      cpu: 500m
 
 agent:
   # Drone agent configuration. Values in here get injected as
@@ -53,14 +55,13 @@ agent:
   # http://readme.drone.io/admin/installation-reference#server-options
   env:
     DRONE_DEBUG: false
-    DOCKER_HOST: "tcp://localhost:2375"
   resources:
     requests:
       memory: 32Mi
       cpu: 40m
     limits:
-      memory: 2Gi
-      cpu: 1
+      memory: 1Gi
+      cpu: 500m
 
 # Uncomment this if you want to set a specific shared secret between
 # the agents and servers, otherwise this will be auto-generated.
