@@ -28,6 +28,7 @@ spec:
       {{- if .Values.restore.enabled }}
       - name: restore-backups
         image: {{ .Values.restore.image }}
+        imagePullPolicy: IfNotPresent
         env:
         - name: NEXUS_DATA
           value: {{ .Values.statefulset.persistence.path }}

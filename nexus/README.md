@@ -91,6 +91,15 @@ since we need a reverse proxy in front of Nexus (and even if
 Kubernetes figures out how to route by port in Nexus, the ingress is
 still in front of Nexus, so).
 
+## create manifests
+
+From the root of this repository, you could
+
+```
+$ helm install ./nexus --dry-run --debug --values ./nexus/values-sc.yaml | \
+  sed -e '1,/MANIFEST/d' > ./nexus/manifests.yaml
+```
+
 [nexus3]: https://hub.docker.com/r/sonatype/nexus3/
 [DevOpsKube package]: https://github.com/devopskube/devopskube/tree/master/charts/nexus
 [here]: http://repo.devpoc1.jamconsultg.com/nexus

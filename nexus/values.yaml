@@ -15,7 +15,7 @@ ingress:
      env: prod
 
 statefulset:
-  image: sonatype/nexus3:3.4.0
+  image: cloudsc/nexus3-blobstore-s3
   pullPolicy: IfNotPresent
   containerPort: 8081
   javaOpts: "-Xms1200m -Xmx1200m"
@@ -32,7 +32,7 @@ restore:
       - name: example
 
 proxy:
-  image: cloudsc/nexus-reverse-proxy:77767f
+  image: cloudsc/nexus-reverse-proxy:8eb4f7
   resources:
     limits:
       cpu: 100m

@@ -1,0 +1,181 @@
+
+---
+# Source: nexus/templates/proxy-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: giddy-terrier-nexus-proxy
+  labels:
+    app: giddy-terrier-nexus-proxy
+    chart: "nexus-3.6.0"
+    release: "giddy-terrier"
+    heritage: "Tiller"
+spec:
+  type: ClusterIP
+  ports:
+  - name: http
+    port: 80
+    targetPort: http
+    protocol: TCP
+  selector:
+    app: giddy-terrier-nexus-proxy
+
+---
+# Source: nexus/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: giddy-terrier-nexus
+  labels:
+    app: giddy-terrier-nexus
+    chart: "nexus-3.6.0"
+    release: "giddy-terrier"
+    heritage: "Tiller"
+spec:
+  type: ClusterIP
+  ports:
+  - name: http
+    port: 80
+    targetPort: http
+  - name: docker-private
+    port: 18444
+    targetPort: 18444
+  - name: docker-group
+    port: 18443
+    targetPort: 18443
+  selector:
+    app: giddy-terrier-nexus
+
+---
+# Source: nexus/templates/proxy-deployment.yaml
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: giddy-terrier-nexus-proxy
+  labels:
+    app: giddy-terrier-nexus-proxy
+    heritage: "Tiller"
+    release: "giddy-terrier"
+    chart: "nexus-3.6.0"
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: giddy-terrier-nexus-proxy
+        heritage: "Tiller"
+        release: "giddy-terrier"
+        chart: "nexus-3.6.0"
+    spec:
+      containers:
+      - name: giddy-terrier-nexus-proxy
+        image: cloudsc/nexus-reverse-proxy:8eb4f7
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: NEXUS_TARGET
+          value: http://giddy-terrier-nexus:80
+        - name: DOCKER_PRIVATE_TARGET
+          value: http://giddy-terrier-nexus:18444
+        - name: DOCKER_GROUP_TARGET
+          value: http://giddy-terrier-nexus:18443
+        ports:
+        - name: http
+          containerPort: 3000
+        resources:
+          limits:
+            cpu: 100m
+            memory: 128Mi
+          requests:
+            cpu: 10m
+            memory: 64Mi
+          
+
+---
+# Source: nexus/templates/statefulset.yaml
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: giddy-terrier-nexus
+  labels:
+    app: giddy-terrier-nexus
+    heritage: "Tiller"
+    release: "giddy-terrier"
+    chart: "nexus-3.6.0"
+spec:
+  serviceName: giddy-terrier-nexus
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: giddy-terrier-nexus
+        heritage: "Tiller"
+        release: "giddy-terrier"
+        chart: "nexus-3.6.0"
+    spec:
+      initContainers:
+      - name: init-volume
+        image: busybox
+        command: ['sh', '-c', 'chown -R 200 /nexus-data']
+        volumeMounts:
+        - name: nexus-data
+          mountPath: /nexus-data
+      - name: restore-backups
+        image: cloudsc/nexus-backup:1.1.0
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: NEXUS_DATA
+          value: /nexus-data
+        volumeMounts:
+        - name: nexus-data
+          mountPath: /nexus-data
+      containers:
+      - name: giddy-terrier-nexus
+        image: cloudsc/nexus3-blobstore-s3
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: INSTALL4J_ADD_VM_PARAMS
+          value: "-Xms1200m -Xmx1200m"
+        ports:
+        - name: http
+          containerPort: 8081
+        - name: docker-private
+          containerPort: 18444
+        - name: docker-group
+          containerPort: 18443
+        volumeMounts:
+        - name: nexus-data
+          mountPath: /nexus-data
+      imagePullSecrets:
+      - name: cloudsc
+      
+  volumeClaimTemplates:
+  - metadata:
+      name: nexus-data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 100Gi
+
+---
+# Source: nexus/templates/ingress.yaml
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: giddy-terrier-nexus
+  labels:
+    app: giddy-terrier-nexus
+    heritage: "Tiller"
+    release: "giddy-terrier"
+    chart: "nexus-3.6.0"
+    env: prod
+spec:
+  rules:
+  - host: nexus.admin.sharecare.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: giddy-terrier-nexus-proxy
+          servicePort: http
+
