@@ -31,13 +31,33 @@ spec:
           - name: DRONE_SERVER_HOST
             value: https://{{ .Values.ingress.hostname }}
           {{- end }}
-          {{ range $key, $value := .Values.server.secretEnvKeys }}
-          - name: {{ $key }}
+
+          - name: DRONE_ADMIN
             valueFrom:
               secretKeyRef:
-                name: drone
-                key: {{ $value | quote }}
-          {{ end }}
+                name: {{ .Values.server.secret }}
+                key: github_admins
+          - name: DRONE_DATABASE_DATASOURCE
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.server.secret }}
+                key: db_driver
+          - name: DRONE_GITHUB_CLIENT
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.server.secret }}
+                key: github_client
+          - name: DRONE_GITHUB_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.server.secret }}
+                key: github_secret
+          - name: DRONE_ORGS
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.server.secret }}
+                key: github_orgs
+
           {{ range $key, $value := .Values.server.env }}
           - name: {{ $key }}
             value: {{ $value | quote }}

@@ -35,12 +35,7 @@ server:
     DRONE_OPEN: true
     DRONE_GITHUB: true
     DRONE_GITHUB_PRIVATE_MODE: true
-  secretEnvKeys:
-    DRONE_ORGS: "github_orgs"
-    DRONE_ADMIN: "github_admins"
-    DRONE_GITHUB_CLIENT: "github_client"
-    DRONE_GITHUB_SECRET: "github_secret"
-    DRONE_DATABASE_DATASOURCE: "db_driver"
+  secret: drone
   resources:
     requests:
       memory: 32Mi
