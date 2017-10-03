@@ -24,7 +24,9 @@ This chart stands up a Drone server. This includes:
 ## Installing the Chart
 
 The chart is currently set up to require the following two Kubernetes
-secrets
+secrets. The names (`drone` and `drone-nexus`) cannot be changed
+without changing the counterpart values in the manifest. The secret
+values themselves are available in the credentials document in teams.
 
 ```bash
 $ kubectl create secret generic drone \
@@ -37,12 +39,15 @@ $ kubectl create secret generic drone \
 $ kubectl create secret generic drone-nexus \
     --from-file=$HOME/.npmrc \
     --from-file=$HOME/.sbt/0.13/plugins/credentials.sbt \
-    --from-file=$HOME/.m2/settings.xml
+    --from-file=$HOME/.m2/settings.xml \
+    --from-file=$HOME/.gradle/gradle.properties \
+    --from-literal=username=<REDACTED> \
+    --from-literal=password=<REDACTED>
 ```
 
-Note that these secret keys must match the `values.yaml` secretEnvKeys
-section - it's unnecessarily confusing, but if you add the secret as
-above, you don't have to worry about it.
+Note that the second secret assumes that you've configured those files
+only for access to Nexus. Don't put your credentials for other
+repositories in the secret.
 
 Drone uses sqlite3 by default but we're using postgresql; drone has
 additional [documentation for its backends][docs] available as well.
@@ -58,6 +63,16 @@ Or to upgrade an existing installation,
 ```bash
 $ helm upgrade <existing-name> ./drone
 ```
+
+To see what helm is doing, or to install without helm tiller installed
+remotely, you can see the generated manifests like
+
+```bash
+$ helm install ./drone --dry-run --debug  | sed -e '1,/MANIFEST/d' > ./drone/manifests.yaml
+```
+
+Note that you will need helm and tiller installed locally for this to
+work.
 
 [fork]: https://github.com/bacongobbler/kube-charts/tree/440e9d64298741253a06058c68dc871fd65aa32a
 [pr]: https://github.com/kubernetes/charts/pull/821

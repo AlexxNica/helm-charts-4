@@ -1,25 +1,14 @@
 image:
-  org: drone
+  org: gempesaw
   name: drone
-  tag: 0.8.0-rc.3
-  agentName: agent
-  agentTag: 0.8.0-rc.3
+  tag: drone-0.8.1
+  agentName: drone
+  agentTag: agent-0.8.1
   pullPolicy: Always
-
-# it is a bad idea to change the internalPorts
-service:
-  http:
-    externalPort: 80
-    internalPort: 8000
-  grpc:
-    internalPort: 9000
-  docker:
-    internalPort: 2375
-  type: ClusterIP
 
 ingress:
   enabled: true
-  hostname: drone.devpoc1.jamconsultg.com
+  hostname: drone.admin.sharecare.com
   labels:
      env: prod
 
@@ -57,6 +46,18 @@ agent:
     limits:
       memory: 1Gi
       cpu: 500m
+
+# it is a bad idea to change the internalPorts. these are only here
+# for because it's nice to templatize them.
+service:
+  http:
+    externalPort: 80
+    internalPort: 8000
+  grpc:
+    internalPort: 9000
+  docker:
+    internalPort: 2375
+  type: ClusterIP
 
 # Uncomment this if you want to set a specific shared secret between
 # the agents and servers, otherwise this will be auto-generated.

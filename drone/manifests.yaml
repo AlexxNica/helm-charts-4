@@ -1,0 +1,275 @@
+
+---
+# Source: drone/templates/secrets.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: quaffing-ladybird-drone
+  labels:
+    app: quaffing-ladybird-drone
+    chart: "drone-1.0.0"
+    release: "quaffing-ladybird"
+    heritage: "Tiller"
+type: Opaque
+data:
+
+  secret: "N2ppWGl2SWtSbUdncnV2cUNQTTJvZUFI"
+
+
+---
+# Source: drone/templates/service-dind.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: quaffing-ladybird-drone-dind
+  labels:
+    app: quaffing-ladybird-drone
+    chart: "drone-1.0.0"
+    release: "quaffing-ladybird"
+    heritage: "Tiller"
+spec:
+  type: ClusterIP
+  ports:
+  - name: docker
+    port: 2375
+    targetPort: docker
+  selector:
+    app: quaffing-ladybird-drone-dind
+
+---
+# Source: drone/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: quaffing-ladybird-drone
+  labels:
+    app: quaffing-ladybird-drone
+    chart: "drone-1.0.0"
+    release: "quaffing-ladybird"
+    heritage: "Tiller"
+spec:
+  type: ClusterIP
+  ports:
+  - name: http
+    port: 80
+    targetPort: http
+  - name: grpc
+    port: 9000
+    targetPort: grpc
+  selector:
+    app: quaffing-ladybird-drone-server
+
+---
+# Source: drone/templates/deployment-dind.yaml
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: quaffing-ladybird-drone-dind
+  labels:
+    app: quaffing-ladybird-drone-dind
+    chart: "drone-1.0.0"
+    release: "quaffing-ladybird"
+    heritage: "Tiller"
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: quaffing-ladybird-drone-dind
+        chart: "drone-1.0.0"
+        release: "quaffing-ladybird"
+        heritage: "Tiller"
+    spec:
+      containers:
+      - name: quaffing-ladybird-drone-dind
+        image: docker:stable-dind
+        args:
+        - "--storage-driver=overlay"
+        ports:
+        - name: docker
+          containerPort: 2375
+          protocol: TCP
+        securityContext:
+          privileged: true
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        volumeMounts:
+        - mountPath: /secrets
+          name: drone-nexus
+      volumes:
+      - name: drone-nexus
+        secret:
+          secretName: drone-nexus
+
+---
+# Source: drone/templates/deployment-server.yaml
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: quaffing-ladybird-drone-server
+  labels:
+    app: quaffing-ladybird-drone-server
+    chart: "drone-1.0.0"
+    release: "quaffing-ladybird"
+    heritage: "Tiller"
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: quaffing-ladybird-drone-server
+        chart: "drone-1.0.0"
+        release: "quaffing-ladybird"
+        heritage: "Tiller"
+    spec:
+      containers:
+      - name: quaffing-ladybird-drone-server
+        image: "gempesaw/drone:drone-0.8.1"
+        imagePullPolicy: Always
+        env:
+          - name: cache
+            value: bust3
+          - name: DRONE_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: quaffing-ladybird-drone
+                key: secret
+          - name: DRONE_SERVER_HOST
+            value: https://drone.admin.sharecare.com
+
+          - name: DRONE_ADMIN
+            valueFrom:
+              secretKeyRef:
+                name: drone
+                key: github_admins
+          - name: DRONE_DATABASE_DATASOURCE
+            valueFrom:
+              secretKeyRef:
+                name: drone
+                key: db_driver
+          - name: DRONE_GITHUB_CLIENT
+            valueFrom:
+              secretKeyRef:
+                name: drone
+                key: github_client
+          - name: DRONE_GITHUB_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: drone
+                key: github_secret
+          - name: DRONE_ORGS
+            valueFrom:
+              secretKeyRef:
+                name: drone
+                key: github_orgs
+
+
+          - name: DRONE_DATABASE_DRIVER
+            value: "postgres"
+
+          - name: DRONE_DEBUG
+            value: "true"
+
+          - name: DRONE_GITHUB
+            value: "true"
+
+          - name: DRONE_GITHUB_PRIVATE_MODE
+            value: "true"
+
+          - name: DRONE_OPEN
+            value: "true"
+
+        ports:
+        - name: http
+          containerPort: 8000
+        - name: grpc
+          containerPort: 9000
+        readinessProbe:
+          httpGet:
+            path: /
+            port: http
+        resources:
+          limits:
+            cpu: 500m
+            memory: 1Gi
+          requests:
+            cpu: 40m
+            memory: 32Mi
+
+
+---
+# Source: drone/templates/deployment-agent.yaml
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: quaffing-ladybird-drone-agent
+  labels:
+    app: quaffing-ladybird-drone-agent
+    chart: "drone-1.0.0"
+    release: "quaffing-ladybird"
+    heritage: "Tiller"
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: quaffing-ladybird-drone-agent
+        chart: "drone-1.0.0"
+        release: "quaffing-ladybird"
+        heritage: "Tiller"
+    spec:
+      containers:
+      - name: quaffing-ladybird-drone-agent
+        image: "gempesaw/drone:agent-0.8.1"
+        imagePullPolicy: Always
+        env:
+        - name: cache
+          value: bust3
+        - name: DRONE_SERVER
+          value: quaffing-ladybird-drone:9000
+        - name: DRONE_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: quaffing-ladybird-drone
+              key: secret
+        - name: DOCKER_HOST
+          value: tcp://quaffing-ladybird-drone-dind:2375
+
+        - name: DRONE_DEBUG
+          value: "true"
+
+        resources:
+          limits:
+            cpu: 500m
+            memory: 1Gi
+          requests:
+            cpu: 40m
+            memory: 32Mi
+
+
+---
+# Source: drone/templates/ingress.yaml
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: quaffing-ladybird-drone
+  labels:
+    app: quaffing-ladybird-drone
+    chart: "drone-1.0.0"
+    release: "quaffing-ladybird"
+    heritage: "Tiller"
+    env: "prod"
+  annotations:
+    null
+
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /
+        backend:
+          serviceName: quaffing-ladybird-drone
+          servicePort: 80
+    host: drone.admin.sharecare.com
