@@ -18,8 +18,24 @@ This chart stands up a Drone server. This includes:
 
 ## Prerequisites
 
-- Kubernetes 1.5+
-- The ability to point a DNS entry or URL at your Drone installation
+You will need a postgresql database somewhere. You can create the
+manifests for one Kubernetes like (add your own random password):
+
+```
+# name is optional. make sure to replace the password
+$ helm install --dry-run --debug --name quaffing-ladybird-drone stable/postgresql \
+  --set postgresUser=drone,postgresDatabase=drone,postgresPassword=<PASSWORD> | sed -e '1,/MANIFEST/d' > ./drone/pg-manifests.yaml
+```
+
+After either creating a pgsql database or finding a cloud provider,
+you can construct the `db_driver` portion of the secret in the next
+section as
+
+```
+postgres://drone:<PASSWORD>@quaffing-ladybird-drone-postgresql:5432/drone?sslmode=disable
+```
+
+Make sure not to commit the password.
 
 ## Installing the Chart
 
