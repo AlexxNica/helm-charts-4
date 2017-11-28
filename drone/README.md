@@ -41,8 +41,11 @@ Make sure not to commit the password.
 
 The chart is currently set up to require the following two Kubernetes
 secrets. The names (`drone` and `drone-nexus`) cannot be changed
-without changing the counterpart values in the manifest. The secret
-values themselves are available in the credentials document in teams.
+without changing the counterpart values in the manifest.
+
+For the github secrets, you'll need to have created an
+[OAuth2 App in Github][gh] and obtain the client and secret from
+there.
 
 ```bash
 $ kubectl create secret generic drone \
@@ -51,12 +54,20 @@ $ kubectl create secret generic drone \
     --from-literal=github_orgs=<comma,separated,orgs> \
     --from-literal=github_admins=<comma,separated,admins> \
     --from-literal=db_driver=<postgres://user:pass@conn.str>
+```
+
+These secret values themselves are available in the credentials
+document in teams; for the Checkmarx `cx*` secrets, contact Joshua
+Tower or the appropriate Security contact.
 
 $ kubectl create secret generic drone-nexus \
     --from-file=$HOME/.npmrc \
     --from-file=$HOME/.sbt/0.13/plugins/credentials.sbt \
     --from-file=$HOME/.m2/settings.xml \
     --from-file=$HOME/.gradle/gradle.properties \
+    --from-file=$HOME/.ivy/credentials \
+    --from-literal=cxUser=<REDACTED> \
+    --from-literal=cxPassword=<REDACTED> \
     --from-literal=username=<REDACTED> \
     --from-literal=password=<REDACTED>
 ```
@@ -80,6 +91,8 @@ Or to upgrade an existing installation,
 $ helm upgrade <existing-name> ./drone
 ```
 
+## Debugging
+
 To see what helm is doing, or to install without helm tiller installed
 remotely, you can see the generated manifests like
 
@@ -92,5 +105,6 @@ work.
 
 [fork]: https://github.com/bacongobbler/kube-charts/tree/440e9d64298741253a06058c68dc871fd65aa32a
 [pr]: https://github.com/kubernetes/charts/pull/821
-[installation]: http://readme.drone.io/admin/installation-guide/
-[drone]: http://readme.drone.io/admin/database-engines/
+[installation]: http://docs.drone.io/installation/
+[gh]: https://github.com/settings/developers
+[docs]: http://docs.drone.io/database-settings/
